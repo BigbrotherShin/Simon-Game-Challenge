@@ -28,23 +28,21 @@ window.addEventListener("keydown", keydownFunction, false);
 */
 
 // ----------------
+reset();
 
-$("body").click(function() {
-  onKeyActivate();
-  $("body").unbind();
-});
+function reset() {
+  $("body").click(function() {
+    onKeyActivate();
+    $("body").unbind();
+  });
 
-$("body").keydown(function() {
-  onKeyActivate();
-  $("body").unbind();
-});
+  $("body").keydown(function() {
+    onKeyActivate();
+    $("body").unbind();
+  });
+}
 
 /*/ ------------------------------
-
-
-
-
-
 
 var callback = function(event) {
   onKeyActivate();
@@ -77,12 +75,12 @@ function onKeyActivate() {
 
   setTimeout(function() {
     decoration(randomChosenColour);
-  }, 1000);
+  }, 1100);
 
   console.log(gamePattern);
 }
 
-//button blink and play sound...
+//Process of game...
 
 $(".btn").click(onButtonClick);
 
@@ -101,22 +99,44 @@ function onButtonClick() {
       onKeyActivate();
       userAnswer.length = 0;
     } else {
-      makeSound("wrong");
-      $("#level-title").text("Game Over !");
-      $("body").addClass("game-over");
+      gameOver();
+      realReStart();
     }
   } else if (
     JSON.stringify(gamePattern.slice(0, userAnswer.length)) ==
     JSON.stringify(userAnswer)
   ) {
   } else {
-    makeSound("wrong");
-    $("#level-title").text("Game Over !");
-    $("body").addClass("game-over");
+    gameOver();
+    realReStart();
     console.log(userAnswer);
   }
 }
 
+// Game over function...
+function gameOver() {
+  makeSound("wrong");
+  $("#level-title").text("Game Over !");
+  $("body").addClass("game-over");
+}
+
+function realReStart() {
+  setTimeout(function() {
+    reStart();
+  }, 1000);
+}
+
+function reStart() {
+  $("p").text("Press Any Key to Restart");
+  $("body").click(function() {
+    window.location = window.location.pathname;
+    $("body").unbind();
+  });
+  $("body").keydown(function() {
+    window.location = window.location.pathname;
+    $("body").unbind();
+  });
+}
 // Blink and sound function...
 
 function decoration(chosenColour) {

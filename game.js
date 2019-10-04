@@ -15,7 +15,12 @@
 // }
 
 // proceed of the game
-document.querySelector("body").addEventListener("keydown", onKeyActivate);
+document.querySelector("body").addEventListener("keydown", keydownFunction);
+var keydownFunction = function(event) {
+  onKeyActivate();
+  window.removeEventListener("keydown", keydownFunction, false);
+};
+window.addEventListener("keydown", keydownFunction, false);
 
 var gamePattern = [];
 var buttonColours = ["red", "blue", "green", "yellow"];
@@ -28,17 +33,11 @@ function onKeyActivate() {
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
-  $("#" + randomChosenColour)
-    .fadeTo(300, 0.1)
-    .fadeTo(300, 1);
 
-  makeSound();
+  setTimeout(function() {
+    decoration(randomChosenColour);
+  }, 1000);
 
-  function makeSound() {
-    var soundName = "sounds/" + randomChosenColour + ".mp3";
-    var audio = new Audio(soundName);
-    audio.play();
-  }
   console.log(gamePattern);
 }
 
@@ -50,6 +49,9 @@ var userAnswer = [];
 
 function onButtonClick() {
   var userClickButton = this.id;
+
+  decoration(userClickButton);
+
   userAnswer.push(userClickButton);
 
   if (gamePattern.length == userAnswer.length) {
@@ -58,6 +60,7 @@ function onButtonClick() {
       onKeyActivate();
       userAnswer.length = 0;
     } else {
+      makeSound("wrong");
       $("#level-title").text("Game Over !");
       $("body").addClass("game-over");
     }
@@ -66,10 +69,27 @@ function onButtonClick() {
     JSON.stringify(userAnswer)
   ) {
   } else {
+    makeSound("wrong");
     $("#level-title").text("Game Over !");
     $("body").addClass("game-over");
     console.log(userAnswer);
   }
+}
+
+// Blink and sound function...
+
+function decoration(chosenColour) {
+  $("#" + chosenColour)
+    .fadeTo(300, 0.1)
+    .fadeTo(300, 1);
+
+  makeSound(chosenColour);
+}
+
+function makeSound(nameOfSound) {
+  var soundName = "sounds/" + nameOfSound + ".mp3";
+  var audio = new Audio(soundName);
+  audio.play();
 }
 
 // if (gamePattern. != userAnswer) {

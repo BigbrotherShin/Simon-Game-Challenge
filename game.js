@@ -15,12 +15,53 @@
 // }
 
 // proceed of the game
+
+/*
 document.querySelector("body").addEventListener("keydown", keydownFunction);
-var keydownFunction = function(event) {
+document.querySelector("body").addEventListener("click", keydownFunction);
+
+function keydownFunction(event) {
   onKeyActivate();
   window.removeEventListener("keydown", keydownFunction, false);
-};
+}
 window.addEventListener("keydown", keydownFunction, false);
+*/
+
+// ----------------
+
+$("body").click(function() {
+  onKeyActivate();
+  $("body").unbind();
+});
+
+$("body").keydown(function() {
+  onKeyActivate();
+  $("body").unbind();
+});
+
+/*/ ------------------------------
+
+
+
+
+
+
+var callback = function(event) {
+  onKeyActivate();
+  window.removeEventListener("click", keydownFunction, false);
+};
+
+function insideAdd() {
+  window.addEventListener("click", keydownFunction, false);
+}
+
+$("body").keydown(function() {
+  if (event.which == 13) callback();
+  insideAdd();
+});
+
+$("body").click(callback);
+// -------------------------------------- */
 
 var gamePattern = [];
 var buttonColours = ["red", "blue", "green", "yellow"];

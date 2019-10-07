@@ -28,6 +28,7 @@ window.addEventListener("keydown", keydownFunction, false);
 */
 
 // ----------------
+
 reset();
 
 function reset() {
@@ -87,29 +88,31 @@ $(".btn").click(onButtonClick);
 var userAnswer = [];
 
 function onButtonClick() {
-  var userClickButton = this.id;
+  if (gamePattern.length >= 1) {
+    var userClickButton = this.id;
 
-  decoration(userClickButton);
+    decoration(userClickButton);
 
-  userAnswer.push(userClickButton);
+    userAnswer.push(userClickButton);
 
-  if (gamePattern.length == userAnswer.length) {
-    if (JSON.stringify(gamePattern) == JSON.stringify(userAnswer)) {
-      ++level;
-      onKeyActivate();
-      userAnswer.length = 0;
+    if (gamePattern.length == userAnswer.length) {
+      if (JSON.stringify(gamePattern) == JSON.stringify(userAnswer)) {
+        ++level;
+        onKeyActivate();
+        userAnswer.length = 0;
+      } else {
+        gameOver();
+        realReStart();
+      }
+    } else if (
+      JSON.stringify(gamePattern.slice(0, userAnswer.length)) ==
+      JSON.stringify(userAnswer)
+    ) {
     } else {
       gameOver();
       realReStart();
+      console.log(userAnswer);
     }
-  } else if (
-    JSON.stringify(gamePattern.slice(0, userAnswer.length)) ==
-    JSON.stringify(userAnswer)
-  ) {
-  } else {
-    gameOver();
-    realReStart();
-    console.log(userAnswer);
   }
 }
 

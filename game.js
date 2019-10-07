@@ -69,14 +69,21 @@ var level = 1;
 //button blink and play sound...
 
 function onKeyActivate() {
-  $("#level-title").text('"' + "level-" + level + '"');
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
 
-  setTimeout(function() {
+  if (gamePattern.length > 1) {
+    setTimeout(function() {
+      decoration(randomChosenColour);
+      $("#level-title").text('"' + "level-" + level + '"');
+      level++;
+    }, 1100);
+  } else {
     decoration(randomChosenColour);
-  }, 1100);
+    $("#level-title").text('"' + "level-" + level + '"');
+    level++;
+  }
 
   console.log(gamePattern);
 }
@@ -91,13 +98,12 @@ function onButtonClick() {
   if (gamePattern.length >= 1) {
     var userClickButton = this.id;
 
-    decoration(userClickButton);
+    animatePress(userClickButton);
 
     userAnswer.push(userClickButton);
 
     if (gamePattern.length == userAnswer.length) {
       if (JSON.stringify(gamePattern) == JSON.stringify(userAnswer)) {
-        ++level;
         onKeyActivate();
         userAnswer.length = 0;
       } else {
@@ -144,8 +150,17 @@ function reStart() {
 
 function decoration(chosenColour) {
   $("#" + chosenColour)
-    .fadeTo(300, 0.1)
-    .fadeTo(300, 1);
+    .fadeTo(250, 0.1)
+    .fadeTo(250, 1);
+
+  makeSound(chosenColour);
+}
+
+function animatePress(chosenColour) {
+  $("#" + chosenColour).addClass("pressed");
+  setTimeout(function() {
+    $("#" + chosenColour).removeClass("pressed");
+  }, 100);
 
   makeSound(chosenColour);
 }
